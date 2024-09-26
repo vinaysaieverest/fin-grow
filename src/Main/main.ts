@@ -1,3 +1,5 @@
+import { and } from "sequelize"
+
 export const transactions=(amount:number,type:string)=>{
     let intialAmount = 10000
     let amountAfterTranacation
@@ -18,4 +20,10 @@ export const transactions=(amount:number,type:string)=>{
 export const budget=(salary: number, Groceries: number, Entertainment: number)=>{
     return salary-Groceries-Entertainment;
 
+}
+export const login=(username:string,password:string)=>{
+    if(username="vinaysai", password="Vinaysai02"){
+        return true
+
+    }
 }

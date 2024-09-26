@@ -1,4 +1,4 @@
-import { budget } from "../Main/main"
+import { budget, login } from "../Main/main"
 import { data } from "../../data"
 import { transactions } from "../Main/main"
 const user = data[0]
@@ -17,5 +17,10 @@ describe("This is about transactions",()=>{
     })
     test ('should check wheather balance is equal to zero',()=>{
         expect (transactions(2000,"balanceCheck")).toEqual("NoBalance")
+    })
+})
+describe("This is about Login",()=>{
+    test('should check aboout username and password',()=>{
+        expect(login("vinay","Vinaysai02")).toBeTruthy
     })
 })
