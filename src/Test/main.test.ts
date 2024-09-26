@@ -1,13 +1,8 @@
-import { budget, login } from "../Main/main"
+import { Groceriesbudget, Entertainmentbudget,login } from "../Main/main"
 import { data } from "../../data"
 import { transactions } from "../Main/main"
 const user = data[0]
-describe('This is about budget',()=>{
-    test('should return the budget',()=>{
-        expect(budget(user.salary,user.categories.Entertainment,user.categories.Groceries)).toBe(8000)
 
-    })
-})
 describe("This is about transactions",()=>{
     test('should check about credit',()=>{
         expect(transactions(2000,"credit")).toBe(12000)
@@ -24,3 +19,12 @@ describe("This is about Login",()=>{
         expect(login("vinay","Vinaysai02")).toBeTruthy
     })
 })
+describe('This will manage the budget for each category',()=>{
+    test('should track the groceries budget',()=>{
+        expect(Groceriesbudget(5000,1000)).toBe(4000)
+    })
+    test('should track the groceries budget',()=>{
+        expect(Groceriesbudget(5000,2000)).toBe(3000)
+    })
+})
+

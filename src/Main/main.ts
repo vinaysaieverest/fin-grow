@@ -17,10 +17,15 @@ export const transactions=(amount:number,type:string)=>{
     return amountAfterTranacation
 
 }
-export const budget=(salary: number, Groceries: number, Entertainment: number)=>{
-    return salary-Groceries-Entertainment;
-
+export const Groceriesbudget=(budget: number, spent: number)=>{
+    budget = budget-spent;
+    return budget
 }
+export const Entertainmentbudget=(budget: number, spent: number)=>{
+    budget = budget-spent;
+    return budget
+}
+
 export const login=(username:string,password:string)=>{
     if(username="vinaysai", password="Vinaysai02"){
         return true
