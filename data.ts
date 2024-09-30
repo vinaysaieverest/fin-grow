@@ -1,5 +1,6 @@
 type TypeCart = {
     name:string,
+    password:string
     salary:number,
     otherIncome:number
     categories:Categories
@@ -12,7 +13,7 @@ type  Categories={
 
 }
 type Savings={
-    emergency:number,
+    goal:string,
     totalSavings:number,
     currentAmount:number
 
@@ -22,6 +23,7 @@ type Savings={
 export const data:TypeCart[] = [
     {
         name:"vinay",
+        password:"Vinaysai02",
         salary :10000,
         otherIncome:2000,
         categories:
@@ -32,9 +34,9 @@ export const data:TypeCart[] = [
         ,
         savings:
             {
-                emergency:1000,
-                totalSavings:7000,
-                currentAmount:4000
+                goal:"Bike",
+                totalSavings:50000,
+                currentAmount:20000
 
             }
         
