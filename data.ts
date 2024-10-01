@@ -1,4 +1,4 @@
-type TypeCart = {
+export type TypeCart = {
     name:string,
     password:string
     salary:number,

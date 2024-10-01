@@ -1,5 +1,6 @@
+import axios from "axios";
 
-export const transactions=(amount:number,type:string)=>{
+export const transactions= (amount:number,type:string)=>{
     let intialAmount = 10000
     let amountAfterTranacation
     if(type==="debit"){
@@ -19,4 +20,5 @@ export const transactions=(amount:number,type:string)=>{
     }
     }
     return amountAfterTranacation
+    
 }
