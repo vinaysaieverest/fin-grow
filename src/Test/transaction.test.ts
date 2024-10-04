@@ -1,24 +1,36 @@
-import { transactions } from "../main/transaction"
-import { goal } from "../main/g"
-import { transaction } from "../main/t"
 
-describe("This is about transactions",()=>{
-    test('should check about credit',()=>{
-        expect(transactions(2000,"credit")).toBe(12000)
-    })
-    test('should check debit money',()=>{
-        expect(transactions(2000,"debit")).toBe(8000)
-    })
-    test('should return error if debiting money is more than money with in account',()=>{
-        expect(transactions(10001,"debit")).toBeFalsy
-    })
-    test ('should check wheather balance is equal to zero',()=>{
-        expect (transactions(2000,"balanceCheck")).toEqual("NoBalance")
-    })
-   
-})
-// transaction(3000,"debit","vinay")
-// goal(5000,2000,"Cycle",'vinay')
-// handleLogin(1000,"credit","vinay")
-// goal(5000,2000,"Cycle",'vinay')
+import axios from 'axios';
+import { TransactionService } from '../main/transaction';  // import your class
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+describe('TransactionService', () => {
+  it('should successfully make a transaction', async () => {
+    mockedAxios.post.mockResolvedValue({ data: { success: true } });
 
+    const transaction = new TransactionService(100, 'credit', 'Vinay');
+    const result = await transaction.makeTransaction();
+
+    expect(result).toBe(true);
+    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/transaction', {
+      amount: 100,
+      type: 'credit',
+      name: 'Vinay'
+    });
+  });
+
+  it('should fail the transaction when axios throws an error', async () => {
+    mockedAxios.post.mockRejectedValue(new Error('Network Error'));
+
+    const transaction = new TransactionService(200, 'debit', 'Vinay');
+    const result = await transaction.makeTransaction();
+
+    expect(result).toBe(false); 
+    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/transaction', {
+      amount: 200,
+      type: 'debit',
+      name: 'Vinay'
+    });
+  });
+});
+const transaction = new TransactionService(100, 'credit', 'Srinija');
+transaction.makeTransaction();
