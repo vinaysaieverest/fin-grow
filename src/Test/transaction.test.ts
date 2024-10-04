@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { TransactionService } from '../main/transaction';  // import your class
+import { TransactionService } from '../main/transaction';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('TransactionService', () => {
@@ -29,8 +29,10 @@ describe('TransactionService', () => {
       amount: 200,
       type: 'debit',
       name: 'Vinay'
-    });
+    }); 
   });
 });
-const transaction = new TransactionService(100, 'credit', 'Srinija');
-transaction.makeTransaction();
+// const transaction = new TransactionService(100, 'credit','Srinija');
+// transaction.makeTransaction();
+
+
