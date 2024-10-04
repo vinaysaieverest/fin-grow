@@ -1,21 +1,31 @@
 import axios from "axios";
 
 export class Budget {
-    private category: string;
-    private budget: number;
+    name:string;
+    budgetName:string;
+    amount:number;
 
-    constructor(category: string, budget: number) {
-        this.category = category;
-        this.budget = budget;
+    constructor(name: string, budgetName: string,amount:number) {
+        this.name = name;
+        this.budgetName = budgetName;
+        this.amount=amount
     }
 
-    public spend(spent: number): string | number {
-        if (this.budget < spent) {
-            return `${this.category} budget limit exceeds`;
+    async setBudget(){
+        try{
+            const response = await axios.post('http://localhost:5005/api/budget', {
+                name: this.name,
+                budgetName: this.budgetName,
+                amount: this.amount,
+              });
+              return true;
         }
-        this.budget -= spent;
-        return this.budget;
-    } 
+        catch(e){
+            console.log("Network Error")
+            return false
+        }
+
+    }
 
 }
 
