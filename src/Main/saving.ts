@@ -13,3 +13,18 @@ export const progres = (amount:number)=>{
     const percentage = amount/target
     return percentage*100
 }
+
+
+// export class target{
+//     private amount:number;
+//     constructor(amount:number){
+//         this.amount=amount
+//     }
+//     public saving(saved: number): string | number {
+//         if (this.amount < saved) {
+//             return `${this.category} budget limit exceeds`;
+//         }
+//         this.budget -= spent;
+//         return this.budget;
+//     }
+// }
