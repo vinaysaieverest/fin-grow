@@ -27,7 +27,11 @@
    ```bash
    git clone -b fingrow-part-1 https://github.com/vinaysaieverest/fin-grow
    ```
-2. To install dependencies:
+2. 1. To clone back end repository:
+   ```bash
+   git clone -b master https://github.com/vinaysaieverest/fingrow-backend
+   ```
+3. To install dependencies:
    - Go to the project directory
       ```bash
       cd folder-name
@@ -36,6 +40,10 @@
       ```bash
       npm install
       ```
+   - Run the backend 
+     ```bash
+     npm start
+     ```
 ## Usage
 1. To run the application run below command.
    ```bash
