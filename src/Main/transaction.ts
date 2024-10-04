@@ -1,24 +1,27 @@
-import axios from "axios";
+import axios from 'axios';
+export class TransactionService {
+  amount: number;
+  type: string;
+  name: string;
 
-export const transactions= (amount:number,type:string)=>{
-    let intialAmount = 10000
-    let amountAfterTranacation
-    if(type==="debit"){
-        amountAfterTranacation =  intialAmount-amount
+  constructor(amount: number, type: string, name: string) {
+    this.amount = amount;
+    this.type = type;
+    this.name = name;
+  }
+
+  async makeTransaction(): Promise<boolean> {
+    try {
+      const response = await axios.post('http://localhost:5005/api/transaction', {
+        amount: this.amount,
+        type: this.type,
+        name: this.name
+      });
+      return true;
+    } catch (error) {
+    //   console.error('Error pushing data to the database:', error);
+      return false;
     }
-    if(type==="credit"){
-        amountAfterTranacation = intialAmount+amount
-    }
-    if(type==="balanceCheck"){
-        if(intialAmount===0){
-            return "NoBalance"
-        }
-    }
-    if(type==="debit"){
-        if(amount>intialAmount){
-            return false
-    }
-    }
-    return amountAfterTranacation
-    
+  }
 }
+
