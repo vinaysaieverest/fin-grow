@@ -3,6 +3,7 @@ export class TransactionService {
   amount: number;
   type: string;
   name: string;
+  // address:string="";
 
   constructor(amount: number, type: string, name: string) {
     this.amount = amount;
@@ -25,3 +26,5 @@ export class TransactionService {
   }
 }
 
+const transaction = new TransactionService(1000,'debit','Vinay')
+transaction.makeTransaction()
