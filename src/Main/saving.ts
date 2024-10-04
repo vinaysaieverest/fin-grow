@@ -1,30 +1,27 @@
-import { data } from "../../data"
-
-const target = data[0].savings.totalSavings
-let savedAmount = data[0].savings.currentAmount
-export const saving =(amount:number)=>{
-    savedAmount =savedAmount+amount
-    return savedAmount
-}
-export const progres = (amount:number)=>{
-    if(amount===target){
-        return true
+import axios from "axios";
+export class saving{
+    name:string;
+    savingName:string;
+    amount:number
+    constructor(name:string,savingName:string,amount:number){
+        this.name=name;
+        this.savingName=savingName
+        this.amount=amount
     }
-    const percentage = amount/target
-    return percentage*100
+    async saving() {
+        try{
+            const response = await axios.post('http://localhost:5005/api/saving', {
+                name:this.name,
+                savingName:this.savingName,
+                amount:this.amount
+              });
+              return true;
+        }
+        catch(e){
+            console.log(e)
+            return false
+        }
+
+      
+    }
 }
-
-
-// export class target{
-//     private amount:number;
-//     constructor(amount:number){
-//         this.amount=amount
-//     }
-//     public saving(saved: number): string | number {
-//         if (this.amount < saved) {
-//             return `${this.category} budget limit exceeds`;
-//         }
-//         this.budget -= spent;
-//         return this.budget;
-//     }
-// }
