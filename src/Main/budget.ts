@@ -1,17 +1,18 @@
+export class Budget {
+    private category: string;
+    private budget: number;
 
-export const Groceriesbudget=(budget: number, spent: number)=>{
-    if(budget<spent){
-        return "Budget limit exceeds"
+    constructor(category: string, budget: number) {
+        this.category = category;
+        this.budget = budget;
     }
-    budget = budget-spent;
-    return budget
-}
-export const Entertainmentbudget=(budget: number, spent: number)=>{
-    if(budget<spent){
-        return "Budget limit exceeds"
-    }
-    budget = budget-spent;
-    return budget
-}
 
+    public spend(spent: number): string | number {
+        if (this.budget < spent) {
+            return `${this.category} budget limit exceeds`;
+        }
+        this.budget -= spent;
+        return this.budget;
+    }
+}
 
