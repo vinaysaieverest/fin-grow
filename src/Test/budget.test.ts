@@ -1,27 +1,33 @@
-import { Budget } from "../main/budget"; // Import the class from your file
+// 
+import axios from 'axios';
+import { Budget } from '../main/budget';
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+describe('TransactionService', () => {
+  it('should successfully make a transaction', async () => {
+    mockedAxios.post.mockResolvedValue({ data: { success: true } });
 
-describe('Budget Class Tests', () => {
-  let groceriesBudget: Budget;
-  let entertainmentBudget: Budget;
+    const budget = new Budget("Vinay","General",2000);
+    const result = await budget.setBudget();
 
-  beforeEach(() => {
-    groceriesBudget = new Budget('Groceries', 100);
-    entertainmentBudget = new Budget('Entertainment', 200);
+    expect(result).toBe(true);
+    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/budget', {
+     name:"Vinay",
+     budgetName:"General",
+     amount:2000
+    });
   });
 
-  it('should return the remaining budget after spending', () => {
-    expect(groceriesBudget.spend(30)).toBe(70); // 100 - 30 = 70
-    expect(entertainmentBudget.spend(50)).toBe(150); // 200 - 50 = 150
-  });
+  it('should fail the transaction when axios throws an error', async () => {
+    mockedAxios.post.mockRejectedValue(new Error('Network Error'));
 
-  it('should return "Budget limit exceeds" if spending exceeds the budget', () => {
-    expect(groceriesBudget.spend(110)).toBe('Groceries budget limit exceeds');
-    expect(entertainmentBudget.spend(250)).toBe('Entertainment budget limit exceeds');
-  });
-
-  it('should handle exact spending', () => {
-    expect(groceriesBudget.spend(100)).toBe(0); // Exact budget spent
+    const budget = new Budget("Vinay","General",2000);
+    const result = await budget.setBudget();
+    expect(result).toBe(false); 
+    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/budget', {
+      name:"Vinay",
+     budgetName:"General",
+     amount:2000
+    }); 
   });
 });
-const groceriesBudget = new Budget('Groceries', 100);
-const entertainmentBudget = new Budget('Entertainment', 200);
