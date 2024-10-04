@@ -7,32 +7,38 @@ describe('TransactionService', () => {
   it('should successfully make a transaction', async () => {
     mockedAxios.post.mockResolvedValue({ data: { success: true } });
 
-    const transaction = new TransactionService(100, 'credit', 'Vinay');
+    const transaction = new TransactionService(100, 'credit', 'Vinay',"budget","General");
     const result = await transaction.makeTransaction();
 
     expect(result).toBe(true);
     expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/transaction', {
       amount: 100,
       type: 'credit',
-      name: 'Vinay'
+      name: 'Vinay',
+      spendType:"General",
+      budgetType:"budget",
+      
     });
   });
 
   it('should fail the transaction when axios throws an error', async () => {
     mockedAxios.post.mockRejectedValue(new Error('Network Error'));
 
-    const transaction = new TransactionService(200, 'debit', 'Vinay');
+    const transaction = new TransactionService(200, 'debit', 'Vinay',"budget","General");
     const result = await transaction.makeTransaction();
 
     expect(result).toBe(false); 
     expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/transaction', {
       amount: 200,
       type: 'debit',
-      name: 'Vinay'
+      name: 'Vinay',
+      spendType:"General",
+      budgetType:"budget"
+      
+
     }); 
   });
 });
-// const transaction = new TransactionService(100, 'credit','Srinija');
-// transaction.makeTransaction();
+
 
 
