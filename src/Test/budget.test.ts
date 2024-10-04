@@ -23,3 +23,5 @@ describe('Budget Class Tests', () => {
     expect(groceriesBudget.spend(100)).toBe(0); // Exact budget spent
   });
 });
+const groceriesBudget = new Budget('Groceries', 100);
+const entertainmentBudget = new Budget('Entertainment', 200);
