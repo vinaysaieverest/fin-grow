@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export class Budget {
     private category: string;
     private budget: number;
@@ -13,6 +15,7 @@ export class Budget {
         }
         this.budget -= spent;
         return this.budget;
-    }
+    } 
+
 }
 
