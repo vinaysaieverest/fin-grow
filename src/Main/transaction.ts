@@ -5,7 +5,6 @@ export class TransactionService {
   name: string;
   budgetType:string
   spendType:string
-  // address:string="";
 
   constructor(amount: number, type: string, name: string,budgetType:string,spendType:string) {
     this.amount = amount;
@@ -30,4 +29,27 @@ export class TransactionService {
       return false;
     }
   }
+  async getTransaction(name:string):Promise<any>{
+    try{
+      const response = await axios.get(`http://localhost:5005/api/recenttransactions/${name}`,{
+      });
+      return response.data
+    }
+    catch(e){
+      console.log(e)
+      return false
+    }
+  }
+
+}
+export class getTransaction{
+  amount:number;
+  type:string;
+  category:string;
+  constructor(amount: number, type: string,category:string ) {
+    this.amount = amount;
+    this.type = type;
+    this.category =category
+  }
+
 }
