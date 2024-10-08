@@ -1,5 +1,4 @@
-import { Request, Response, Router } from 'express';
-import { DataModel } from '../../models';
+import { Request, Response } from 'express';
 import { Login } from '../../src/main/post/login';
 const express = require("express")
 const router = express.Router();
