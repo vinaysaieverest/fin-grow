@@ -1,5 +1,4 @@
-import axios from "axios";
-import { DataModel, dataSchema } from "../../../models";
+import { DataModel } from "../../../models";
 
 export class Login {
     name:string;
@@ -20,9 +19,7 @@ export class Login {
               console.log("login",name)
               return true ;
             }
-            else{
-              return false
-            }
+
         }
         catch(e){
             console.log("Error is that",e)
