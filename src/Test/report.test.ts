@@ -1,5 +1,5 @@
-import { data } from "../../data"
-import { report } from "../main/report"
+import { data } from "../main/data"
+import { report } from "../main/post/report"
 
 describe('This test will describe amount reports',()=>{
     test('should return the reports',()=>{
