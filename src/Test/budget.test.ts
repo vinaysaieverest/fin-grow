@@ -1,33 +1,50 @@
-// 
-import axios from 'axios';
-import { Budget } from '../main/budget';
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-describe('TransactionService', () => {
-  it('should successfully make a transaction', async () => {
-    mockedAxios.post.mockResolvedValue({ data: { success: true } });
+import { Budget } from '../main/post/budget';  // Import Budget class
+import { DataModel } from '../.././models';  // Import the mocked DataModel
 
-    const budget = new Budget("Vinay","General",2000);
-    const result = await budget.setBudget();
+// Mock the DataModel so that no real DB calls are made
+jest.mock('../.././models');
+const mockedDataModel = DataModel as jest.Mocked<typeof DataModel>;
 
-    expect(result).toBe(true);
-    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/budget', {
-     name:"Vinay",
-     budgetName:"General",
-     amount:2000
-    });
+describe('Budget Class', () => {
+  
+  beforeEach(() => {
+    jest.clearAllMocks();  // Clear any previous mock data before each test
   });
 
-  it('should fail the transaction when axios throws an error', async () => {
-    mockedAxios.post.mockRejectedValue(new Error('Network Error'));
+  test('should successfully create a budget for an existing user', async () => {
+    const mockUser = {
+      name: 'Vinay',
+      categories: [],
+      save: jest.fn(),
+    };
 
-    const budget = new Budget("Vinay","General",2000);
+    mockedDataModel.findOne.mockResolvedValue(mockUser);  // Mock the DB user query
+
+    const budget = new Budget("Vinay", "General", 500);
     const result = await budget.setBudget();
+
+    expect(result).toBe(false);  
+    expect(mockUser.categories.length).toBe(1);  // Ensure a budget category was added
+    expect(mockUser.categories[0]).toEqual({ budgetName: "General", amount: 500 });  // Check the category and amount
+    expect(mockUser.save).toHaveBeenCalled();  // Ensure the save method was called
+  });
+
+  test('should fail to create a budget when the user does not exist', async () => {
+    mockedDataModel.findOne.mockResolvedValue(null);  // Simulate user not found
+
+    const budget = new Budget("Vinay", "General", 500);
+    const result = await budget.setBudget();
+
     expect(result).toBe(false); 
-    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/budget', {
-      name:"Vinay",
-     budgetName:"General",
-     amount:2000
-    }); 
   });
+
+  test('should handle errors when an exception occurs', async () => {
+    mockedDataModel.findOne.mockRejectedValue(new Error('Database Error'));
+
+    const budget = new Budget("Vinay", "General", 500);
+    const result = await budget.setBudget();
+
+    expect(result).toBe(false); 
+  });
+
 });
