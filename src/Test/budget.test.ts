@@ -23,7 +23,7 @@ describe('Budget Class', () => {
     const budget = new Budget("Vinay", "General", 500);
     const result = await budget.setBudget();
 
-    expect(result).toBe(false);  
+    expect(result).toBe(true);  
     expect(mockUser.categories.length).toBe(1);  // Ensure a budget category was added
     expect(mockUser.categories[0]).toEqual({ budgetName: "General", amount: 500 });  // Check the category and amount
     expect(mockUser.save).toHaveBeenCalled();  // Ensure the save method was called

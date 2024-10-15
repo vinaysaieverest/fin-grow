@@ -23,6 +23,7 @@ export class Budget {
             }
             user.categories.push({budgetName:category,amount});
             await user.save();
+            return true
         }
         catch(e){
             console.log("Network Error")

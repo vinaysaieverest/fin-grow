@@ -19,8 +19,9 @@ export class Saving{
             if (!user) {
               return false;
             }
-            user.savings.push({ goal:savingName, totalSavings:amount});
+            user.savings.push({ goal:savingName, totalSavings:amount,currentAmount:currentAmount});
             await user.save();
+            return true
         }
         catch(e){
             console.log(e)

@@ -16,7 +16,7 @@ export class TransactionService {
     this.category = category
   }
 
-  async makeTransaction(): Promise<boolean> {
+  async makeTransaction() {
     try {
       const name=this.name;
       const transactionName=this.transactionName;
@@ -35,13 +35,13 @@ export class TransactionService {
           return false;
         }
         
-          user.salary -= amount;
-          budget.amount -= amount;
-        
+        user.salary -= amount;
+        budget.amount -= amount;
         user.transaction.push({ transactionName, amount, type,category });
         await user.save();
-  
+        return true
       }
+      
       if(type==="saving"||type==="Saving"){
         const budget = user.saving.find((Tcategory: { goal: string }) => Tcategory.goal === category)
         if (!budget) {
@@ -50,8 +50,9 @@ export class TransactionService {
         budget.currentAmount += amount;
         user.transaction.push({ transactionName, amount, type,category});
         await user.save();
+        return true
       }
-      return true
+      
     } catch (error) {
       return false;
     }
