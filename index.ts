@@ -2,9 +2,9 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require('cors');
-import { data } from "./data";
+import { data } from "./src/main/data";
 import { DataModel } from "./models";
-const app = express();
+export const app = express();
 const transaction = require('./routes/post/transaction');
 const saving = require('./routes/post/goal');
 const budget = require('./routes/post/budget')
@@ -15,7 +15,7 @@ const report = require('./routes/get/report')
 
 app.use(express.json());
 app.use(cors());
-
+module.exports = app
 
 async function connection() {
   try {
