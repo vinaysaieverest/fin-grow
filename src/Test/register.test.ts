@@ -1,37 +1,63 @@
-// 
-import axios from 'axios';
-import { Budget } from '../main/post/budget';
-import { Register } from '../main/post/register';
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-describe('TransactionService', () => {
-  it('should successfully make a transaction', async () => {
-    mockedAxios.post.mockResolvedValue({ data: { success: true } });
+import { Register } from "../main/post/register"
+import { DataModel } from "../../models";
+import mongoose from "mongoose";
 
-    const budget = new Register("Vinay","Vinay123",50000);
-    const result = await budget.setRegister();
-
-    expect(result).toBe(true);
-   
+describe("This is about Login",()=>{
+      beforeEach(() => {
+        jest.clearAllMocks();
+        (DataModel.findOne as jest.Mock) = jest.fn();
+      });
+    test('should check aboout username and password',()=>{
+        const user = new Register("vinay","Vinaysai02",0)
+        const results = user.setRegister()
+        expect(results).toBeFalsy
+    })
+    test('should check aboout username and password',()=>{
+        const user = new Register("Vinay","Vinaysai02",5000)
+        const results = user.setRegister()
+        expect(results).toBeTruthy
+    })
+    test('should check aboout username and password',()=>{
+        const user = new Register("","",70000)
+        const results = user.setRegister()
+        expect(results).toBeFalsy
+    })
+    test('should check aboout username and password',()=>{
+        const user = new Register("","Vinaysai02",90000)
+        const results = user.setRegister()
+        expect(results).toBeFalsy
+    })
+    test('should check aboout username and password',()=>{
+        const user = new Register("Vinay","",60000)
+        const results = user.setRegister()
+        expect(results).toBeFalsy
+    })
+    test("should return true for correct username and password", async () => {
+        (DataModel.findOne as jest.Mock).mockResolvedValue({
+          name: "testUser",
+          password: "12345",
+          salary :50000
+        });
+        const login = new Register("testUser", "12345",50000);
+        const result = await login.setRegister();
+        expect(result).toBe(false);
+      });
+      test("should return true for correct username and password", async () => {
+        (DataModel.findOne as jest.Mock).mockResolvedValue({
+          name: "testUser1",
+          password: "12345",
+          salary :50000
+        });
+        const login = new Register("testUser", "12345",50000);
+        const result = await login.setRegister();
+        expect(result).toBe(false);
+      });
+    test("should handle errors gracefully", async () => {
+    (DataModel.findOne as jest.Mock).mockRejectedValue(new Error("Database error"));
+    const login = new Register("testUser", "12345",50000);
+    const result = await login.setRegister();
+    expect(result).toBe(false);
   });
-  it('should pass if API hits succesfully',()=>{
-    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/register', {
-      name:"Vinay",
-      password:"Vinay123",
-      salary:2000
-     });
-  })
 
-  it('should fail the transaction when axios throws an error', async () => {
-    mockedAxios.post.mockRejectedValue(new Error('Network Error'));
+})
 
-    const budget = new Register("Vinay","Vinay123",50000);
-    const result = await budget.setRegister();
-    expect(result).toBe(false); 
-    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/regidter', {
-        name:"Vinay",
-        password:"Vinay123",
-        salary:2000
-    }); 
-  });
-});
