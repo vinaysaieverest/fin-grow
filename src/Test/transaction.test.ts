@@ -1,63 +1,52 @@
+import { TransactionService } from '../../src/main/post/transaction';
+import { DataModel } from '../.././models';  
 
-import axios from 'axios';
-import { TransactionService } from '../main/transaction';
-import { getTransaction } from '../main/transaction';
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock('../.././models'); 
+
 describe('TransactionService', () => {
-  test('should successfully make a transaction', async () => {
-    mockedAxios.post.mockResolvedValue(true);
+  beforeEach(() => {
+    jest.clearAllMocks();  
+  });
+  it('should return false if user does not exist', async () => {
+    DataModel.findOne = jest.fn().mockResolvedValue(null);
 
-    const transaction = new TransactionService(100, 'credit', 'Vinay',"budget","General");
-    const result = await transaction.makeTransaction();
+    const service = new TransactionService('TestUser', 'TestTransaction', 100, 'budget', 'Food');
+    const result = await service.makeTransaction();
+
+    expect(result).toBe(false);
+    expect(DataModel.findOne).toHaveBeenCalledWith({ name: 'TestUser' });
+  });
+
+  it('should return false if the budget category is not found', async () => {
+    DataModel.findOne = jest.fn().mockResolvedValue({
+      name: 'TestUser',
+      salary: 1000,
+      categories: []
+    });
+
+    const service = new TransactionService('TestUser', 'TestTransaction', 100, 'budget', 'Food');
+    const result = await service.makeTransaction();
+
+    expect(result).toBe(false);
+    expect(DataModel.findOne).toHaveBeenCalled();
+  });
+  it('should correctly update user salary and budget on a valid transaction', async () => {
+    const mockUser = {
+      name: 'TestUser',
+      salary: 1000,
+      categories: [{ budgetName: 'Food', amount: 500 }],
+      transaction: [],
+      save: jest.fn()
+    };
+    DataModel.findOne = jest.fn().mockResolvedValue(mockUser);
+
+    const service = new TransactionService('TestUser', 'TestTransaction', 100, 'budget', 'Food');
+    const result = await service.makeTransaction();
 
     expect(result).toBe(true);
-    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/transaction', {
-      amount: 100,
-      type: 'credit',
-      name: 'Vinay',
-      spendType:"General",
-      budgetType:"budget",
-      
-    });
+    expect(mockUser.salary).toBe(900);  // Salary reduced by 100
+    expect(mockUser.categories[0].amount).toBe(400);  // Category amount reduced by 100
+    expect(mockUser.transaction).toHaveLength(1);  // New transaction added
+    expect(mockUser.save).toHaveBeenCalled();  // Ensure save method is called
   });
-
-  test('should fail the transaction when axios throws an error', async () => {
-    mockedAxios.post.mockRejectedValue(new Error('Network Error'));
-
-    const transaction = new TransactionService(200, 'debit', 'Vinay',"budget","General");
-    const result = await transaction.makeTransaction();
-
-    expect(result).toBe(false); 
-    expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:5005/api/transaction', {
-      amount: 200,
-      type: 'debit',
-      name: 'Vinay',
-      spendType:"General",
-      budgetType:"budget"
-      
-
-    }); 
-  });
-  test('should pass if the get transactions',async()=>{
-    const details = {
-      amount:1000,
-      Ttype:"credit",
-      category: "Bike",
-      spend:"saving"
-    }
-    mockedAxios.get.mockResolvedValue({data:details})
-    const transaction = new TransactionService(200, 'credit', 'Srinija',"saving","Bike");
-    const result = await transaction.getTransaction("Srinija");
-    expect(result).toEqual(details);
-  })
-  test('should fail if we get any error',async()=>{
-    mockedAxios.get.mockRejectedValue(new Error('Network Error'));
-    const transaction = new TransactionService(200, 'credit', 'Srinija',"saving","Bike");
-    const result = await transaction.getTransaction("Srinija");
-    expect(result).toBe(false);
-  })
 });
-
-
-
