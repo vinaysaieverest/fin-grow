@@ -1,26 +1,28 @@
-import axios from "axios";
 import { DataModel } from "../../../models";
 export class Saving{
     name:string;
-    savingName:string;
-    amount:number
-    constructor(name:string,savingName:string,amount:number){
+    goal:string;
+    totalSavings:number
+    constructor(name:string,goal:string,totalSavings:number){
         this.name=name;
-        this.savingName=savingName
-        this.amount=amount
+        this.goal=goal;
+        this.totalSavings=totalSavings;
     }
     async setSaving() {
         try{
             const name = this.name;
-            const savingName = this.savingName;
-            const amount = this.amount
+            const goal = this.goal;
+            const totalSavings = this.totalSavings
             const currentAmount = 0
             const user = await DataModel.findOne({ name });
             if (!user) {
-              return false;
+                console.log("No user found");
+              return false
+              
             }
-            user.savings.push({ goal:savingName, totalSavings:amount,currentAmount:currentAmount});
+            user.savings.push({ goal, totalSavings,currentAmount});
             await user.save();
+            console.log("Saving created")
             return true
         }
         catch(e){

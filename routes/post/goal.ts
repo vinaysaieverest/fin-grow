@@ -4,10 +4,11 @@ const express = require("express")
 const router = express.Router();
 
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/:name', async (req: Request, res: Response) => {
   try {
-    const { name,savingName,amount} = req.body as { name: string; savingName: string; amount: number ; };
-    const user = new Saving(name,savingName,amount)
+    const name = req.params.name
+    const {goal,totalSavings} = req.body as { goal: string; totalSavings: number };
+    const user = new Saving(name,goal,totalSavings)
     const results = await user.setSaving()
     res.status(200).json({message:"Saving created"})
 
